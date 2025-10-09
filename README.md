@@ -47,8 +47,6 @@ After running the `FND` class (`python FND.py`), the model produces evaluation m
 | **Macro Avg** | 0.99      | 0.99   | 0.99     | 8980   |
 | **Weighted Avg** | 0.99  | 0.99   | 0.99     | 8980   |
 
-**Confusion Matrix:**
-
 **Confusion Matrix Visualization:**
 
 ![Confusion Matrix](images/confusion_matrix_logreg.png)

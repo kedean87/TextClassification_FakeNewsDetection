@@ -30,3 +30,27 @@ To allow the script to download the dataset automatically, you need a **Kaggle A
 4. **Set permissions (Linux/macOS)**:
    ```bash
    chmod 600 ~/.kaggle/kaggle.json
+
+---
+
+## Example Output
+
+After running the `FND` class (`python FND.py`), the model produces evaluation metrics.
+
+**Classification Report:**
+
+| Class       | Precision | Recall | F1-Score | Support |
+|------------|-----------|--------|----------|--------|
+| Fake       | 0.99      | 0.98   | 0.99     | 4650   |
+| Real       | 0.98      | 0.99   | 0.99     | 4330   |
+| **Accuracy**  | 0.99      | 0.99   | 0.99     | 8980   |
+| **Macro Avg** | 0.99      | 0.99   | 0.99     | 8980   |
+| **Weighted Avg** | 0.99  | 0.99   | 0.99     | 8980   |
+
+**Confusion Matrix:**
+
+**Confusion Matrix Visualization:**
+
+![Confusion Matrix](images/confusion_matrix_logreg.png)
+
+> The heatmap shows how many real/fake news articles were correctly classified vs misclassified.

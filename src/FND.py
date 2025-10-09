@@ -15,6 +15,10 @@ import nltk
 nltk.download("punkt", quiet=True)
 nltk.download("stopwords", quiet=True)
 
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+
 class FND():
     def __init__(self):
         # define dataframes to house data before split
@@ -110,6 +114,12 @@ class FND():
 
         print("Classification Report:\n", classification_report(self.y_test, y_pred, target_names=["Fake", "Real"]))
         print("Confusion Matrix:\n", confusion_matrix(self.y_test, y_pred))
+        
+        cm = confusion_matrix(self.y_test, y_pred)
+        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+        plt.xlabel("Predicted")
+        plt.ylabel("True")
+        plt.show()
     
     def run(self, use_nltk=False):
         self.download_dataset(use_nltk)

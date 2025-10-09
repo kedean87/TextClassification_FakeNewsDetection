@@ -43,7 +43,7 @@ After running the `FND` class (`python FND.py`), the model produces evaluation m
 |------------|-----------|--------|----------|--------|
 | Fake       | 0.99      | 0.98   | 0.99     | 4650   |
 | Real       | 0.98      | 0.99   | 0.99     | 4330   |
-| **Accuracy**  | 0.99      | 0.99   | 0.99     | 8980   |
+| **Accuracy**  |       |    | 0.99     | 8980   |
 | **Macro Avg** | 0.99      | 0.99   | 0.99     | 8980   |
 | **Weighted Avg** | 0.99  | 0.99   | 0.99     | 8980   |
 

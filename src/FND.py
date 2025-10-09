@@ -17,7 +17,6 @@ nltk.download("stopwords", quiet=True)
 
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
 
 class FND():
     def __init__(self):

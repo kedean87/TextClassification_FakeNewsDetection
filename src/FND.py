@@ -5,11 +5,14 @@ import numpy as np
 import string
 import re
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, HashingVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import LinearSVC
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+import itertools
 
 import nltk
 nltk.download("punkt", quiet=True)
@@ -36,10 +39,20 @@ class FND():
         self.X_test_vec = None
         
         # Word Vectorizers
-        self.vectorizer_tfidf = TfidfVectorizer(max_features=5000, stop_words="english")
+        # self.vectorizer_tfidf = TfidfVectorizer(max_features=5000, stop_words="english")
+        self.vectorizers = {
+            "Count": CountVectorizer(max_features=5000, stop_words='english'),
+            "TF-IDF": TfidfVectorizer(max_features=5000, stop_words='english'),
+            "Hashing": HashingVectorizer(n_features=5000, alternate_sign=False)
+            }
         
         # Classifiers
-        self.model_LogReg = LogisticRegression(max_iter=300)
+        # self.model_LogReg = LogisticRegression(max_iter=300)
+        self.models = {
+            "Logistic Regression": LogisticRegression(max_iter=1000),
+            "Naive Bayes": MultinomialNB(),
+            "Linear SVC": LinearSVC()
+            }
         
         # Model To Use
         self.model = None
@@ -108,26 +121,41 @@ class FND():
     def train(self):
         self.model.fit(self.X_train_vec, self.y_train)
     
-    def predict_and_evaluate(self):
+    def predict_and_evaluate(self, plot_confusion_matrix=False):
         y_pred = self.model.predict(self.X_test_vec)
 
         print("Classification Report:\n", classification_report(self.y_test, y_pred, target_names=["Fake", "Real"]))
         print("Confusion Matrix:\n", confusion_matrix(self.y_test, y_pred))
         
-        cm = confusion_matrix(self.y_test, y_pred)
-        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
-        plt.xlabel("Predicted")
-        plt.ylabel("True")
-        plt.show()
+        if plot_confusion_matrix:
+            cm = confusion_matrix(self.y_test, y_pred)
+            sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+            plt.xlabel("Predicted")
+            plt.ylabel("True")
+            plt.show()
+        
+        acc = accuracy_score(self.y_test, y_pred)
+        return acc
     
-    def run(self, use_nltk=False):
+    def run(self, use_nltk=False, plot_confusion_matrix=False):
         self.download_dataset(use_nltk)
         self.load_model_datasets()
-        self.vectorize(self.vectorizer_tfidf)
-        self.load_model(self.model_LogReg)
-        self.train()
-        self.predict_and_evaluate()
+        
+        results = []
+
+        # Iterate over all combinations
+        for vec_name, model_name in itertools.product(self.vectorizers.keys(), self.models.keys()):
+            print("\n", vec_name + ",", model_name, "\n")
+            self.vectorize(self.vectorizers[vec_name])
+            self.load_model(self.models[model_name])
+            self.train()
+            
+            acc = self.predict_and_evaluate(plot_confusion_matrix)
+            results.append((vec_name, model_name, acc))
+        
+        df_results = pd.DataFrame(results, columns=["Vectorizer", "Model", "Accuracy"])
+        print(df_results.sort_values(by="Accuracy", ascending=False).reset_index(drop=True))
 
 if __name__ == "__main__":
     fnd = FND()
-    fnd.run(use_nltk=False)
+    fnd.run(use_nltk=False, plot_confusion_matrix=False)

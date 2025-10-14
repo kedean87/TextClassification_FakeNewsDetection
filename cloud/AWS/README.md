@@ -71,6 +71,7 @@ docker push <account-id>.dkr.ecr.us-east-2.amazonaws.com/fake-news-lambda:latest
 ---
 
 ## Step 4: Create Lambda Function
+- Before you create the lambda function, you must create the `--role` arn. Go to AWS Console, select `IAM -> Roles -> Create Role`, select the role once created, and copy the arn that was generated to be used as the `--role` argument that you see below.
 ```bash
 aws lambda create-function \
     --function-name fake-news-lambda \
@@ -128,3 +129,4 @@ CloudWatch Logs
 ```bash
 {"prediction":"Fake"}  // or "Real"
 ```
+

@@ -13,6 +13,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import itertools
+import joblib
 
 import nltk
 nltk.download("punkt", quiet=True)
@@ -155,6 +156,23 @@ class FND():
         
         df_results = pd.DataFrame(results, columns=["Vectorizer", "Model", "Accuracy"])
         print(df_results.sort_values(by="Accuracy", ascending=False).reset_index(drop=True))
+        
+        best_row = df_results.sort_values(by="Accuracy", ascending=False).iloc[0]
+        best_vec_name = best_row["Vectorizer"]
+        best_model_name = best_row["Model"]
+        best_accuracy = best_row["Accuracy"]
+
+        print(f"\nBest combination: {best_vec_name} + {best_model_name} (Accuracy: {best_accuracy:.4f})")
+
+        # Re-train the best model fully
+        self.vectorizer = self.vectorizers[best_vec_name]
+        X_train_vec = self.vectorizer.fit_transform(self.X_train)
+        joblib.dump(self.vectorizer, "best_vectorizer.pkl")
+        
+        self.load_model(self.models[best_model_name])
+        self.train()
+        # Save both model and vectorizer
+        joblib.dump(self.model, "best_model.pkl")
 
 if __name__ == "__main__":
     fnd = FND()

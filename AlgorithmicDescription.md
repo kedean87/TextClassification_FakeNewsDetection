@@ -94,7 +94,7 @@ $$
 
 ### **Layman’s Explanation**
 
-Imagine you’re building a spam detector. Logistic Regression looks at features (like TF-IDF scores of words) and learns how each feature contributes to the **probability** that an email is spam.
+Imagine you’re building a spam detector. Logistic Regression looks at features (like COUNT scores of words) and learns how each feature contributes to the **probability** that an email is spam.
 
 - It doesn’t output just “spam” or “not spam” — it outputs a **probability** between 0 and 1.  
 - The **sigmoid function** turns any input into that range.  
